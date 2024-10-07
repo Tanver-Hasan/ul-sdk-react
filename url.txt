@@ -1,0 +1,1 @@
+https://login.tanverhasan.com/authorize?client_id=CkXxEoyEOHSOpfiKXfuvLd8RWmdoy0nr&scope=openid%20email%20profile&response_type=code&redirect_uri=https://localhost:3000/callback&nonce=GfeQ4ryi1_jnCcOfBji1nDK59h40ELfkBjhQz0soERQ&state=JaMJeqrQaucsfHdNDpckpTbbrJ_P70OWwq1wBp6w0Tw&prompt=login
