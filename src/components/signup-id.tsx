@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import TransactionDataContext from '../context/TransactionDataContextProvider';
 
 export default function SignupId() {
-    const { prompt, screen, state, getLink, getFieldErrors } = useContext(TransactionDataContext);
+    const { prompt, screen, state, getLink, getFieldErrors, client, tenant } = useContext(TransactionDataContext);
     const [email, setEmail] = useState('');
     const [loginLink, setLoginLink] = useState('');
     const emailErrors = getFieldErrors('email');
@@ -26,15 +26,19 @@ export default function SignupId() {
     //     console.log('Email:', email);
     // };
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
 
             {/* @ts-ignore */}
-            <Card color="transparent" shadow={false}>
+            <Card color="transparent" shadow={true} className="p-6 w-full max-w-md">
                 {/* @ts-ignore */}
                 <Typography variant="h3" color="blue-gray" className="text-center mb-6">
                     Sign Up
                 </Typography>
-                <form method="POST" className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+                {/* @ts-ignore */}
+                <Typography variant="paragraph" color="blue-gray" className="text-center mb-6 ">
+                    Sign Up to {tenant.friendly_name} to continue to {client.name}
+                </Typography>
+                <form method="POST" className="mt-4 mb-4">
                     <input type="hidden" name="state" value={state} />
                     <div className="mb-1 flex flex-col gap-6">
                         {/* @ts-ignore */}
@@ -61,7 +65,7 @@ export default function SignupId() {
                     {/* @ts-ignore */}
                     <Typography color="gray" className="mt-4 text-center font-normal">
                         Already have an account?{" "}
-                        <a href={loginLink} className="font-medium text-gray-900">
+                        <a href={loginLink} className="ml-1 font-bold">
                             Login
                         </a>
                     </Typography>

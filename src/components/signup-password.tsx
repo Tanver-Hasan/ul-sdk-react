@@ -35,7 +35,7 @@ const SignUpPassword = () => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             {/* @ts-ignore */}
-            <Card color="transparent" shadow={false}>
+            <Card color="transparent" shadow={true} className="p-6 w-full max-w-md">
                 {/* @ts-ignore */}
                 <Typography variant="h3" color="blue-gray" className='text-center mb-6'>
                     Sign Up

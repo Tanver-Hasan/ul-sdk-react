@@ -1,4 +1,3 @@
-
 import {
   Card,
   Input,
@@ -10,36 +9,32 @@ import { useContext, useEffect, useState } from 'react';
 import TransactionDataContext from '../context/TransactionDataContextProvider';
 
 export default function LoginId() {
-  const { prompt, screen, state, getLink, getFieldErrors } = useContext(TransactionDataContext);
+  const { prompt, screen, state, getLink, getFieldErrors, client, tenant } = useContext(TransactionDataContext);
   const [email, setEmail] = useState('');
   const [signupLink, setSignupLink] = useState('');
-  // const [forgotPasswordLink, setForgotPasswordLink] = useState('');
   const usernameErrors = getFieldErrors("username") || [];
 
   useEffect(() => {
     console.log('Prompt:', prompt);
     console.log('Screen:', screen);
+    console.log('Client:', client.name);
     const signuplink = getLink('signup');
     setSignupLink(signuplink);
-   // const forgotPasswordLink = getLink('forgot_password');
-    // setForgotPasswordLink(forgotPasswordLink);
   }, [prompt, screen, getLink]);
-
-  // const handleSubmit = (event: any) => {
-  //   event.preventDefault(); // Prevent page reload
-  //   console.log('Email:', email);
-  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-
       {/* @ts-ignore */}
-      <Card color="transparent" shadow={false}>
+      <Card color="transparent" shadow={true} className="p-6 w-full max-w-md">
         {/* @ts-ignore */}
         <Typography variant="h3" color="blue-gray" className="text-center mb-6">
           Sign In
         </Typography>
-        <form method="POST" className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+        {/* @ts-ignore */}
+        <Typography variant="paragraph" color="blue-gray" className="text-center mb-6">
+          Log in to {tenant.friendly_name} to continue to {client.name}
+        </Typography>
+        <form method="POST" className="mt-4 mb-4">
           <input type="hidden" name="state" value={state} />
           <div className="mb-1 flex flex-col gap-6">
             {/* @ts-ignore */}
@@ -50,7 +45,7 @@ export default function LoginId() {
               placeholder="name@mail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex flex-col gap-4"
+               className="flex flex-col gap-4"
             />
             {/* Display email errors using Alert */}
             {usernameErrors.map((error, index) => (
@@ -64,9 +59,9 @@ export default function LoginId() {
             Continue
           </Button>
           {/* @ts-ignore */}
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Dont have an account?{" "}
-            <a href={signupLink} className="font-medium text-gray-900">
+          <Typography color="gray" className="mt-6 text-center font-normal">
+            Don’t have an account?{" "}
+            <a href={signupLink} className="ml-1 font-bold">
               Signup
             </a>
           </Typography>
