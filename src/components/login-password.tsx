@@ -1,22 +1,25 @@
+
+
 import { useContext, useEffect, useState } from 'react';
 import TransactionDataContext from '../context/TransactionDataContextProvider';
 import { Card, Input, Button, Typography, Alert } from "@material-tailwind/react";
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'; // Import eye icons
 
 const LoginPassword = () => {
     const { prompt, screen, state, getSubmittedFormData, getFieldErrors, getLink } = useContext(TransactionDataContext);
 
-    // Get the submitted form data
     const submittedFormData = getSubmittedFormData;
     const username = getSubmittedFormData("username") || '';
     const [forgotPasswordLink, setForgotPasswordLink] = useState('');
-    // Local state for email and password
     const [email, setEmail] = useState(username); // Populate with the username
     const [password, setPassword] = useState('');
     const [signupLink, setSignupLink] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
     // Get field errors for email and password
     const emailErrors = getFieldErrors("username") || [];
     const passwordErrors = getFieldErrors("password") || [];
+    const allErrors = [...emailErrors, ...passwordErrors];
 
     useEffect(() => {
         console.log(prompt);
@@ -29,77 +32,95 @@ const LoginPassword = () => {
         setSignupLink(signuplink);
     }, [prompt, screen, state, submittedFormData, getLink]);
 
-    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault(); // Prevent page reload
-    //     console.log('Email:', email);
-    //     console.log('Password:', password);
-    //     // Here you can handle the form submission logic (e.g., sending a POST request)
-    // };
-
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            {/* @ts-ignore */}
-            <Card color="transparent" shadow={true} className="p-6 w-full max-w-md">
-                {/* @ts-ignore */}
-                <Typography variant="h3" color="blue-gray" className='text-center mb-6'>
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-400 to-purple-500">
+            <Card shadow={true} className="p-10 w-full max-w-2xl  h-auto bg-white rounded-lg border border-gray-300">
+                <Typography variant="h3" color="blue-gray" className='text-center mb-6 font-bold text-indigo-600 text-3xl'>
                     Sign In
                 </Typography>
-                <form method="POST" className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+
+                <form method="POST" className="space-y-8 mt-4 mb-4">
                     <input type="hidden" name="state" value={state} />
-                    <div className="mb-1 flex flex-col gap-6">
-                        {/* @ts-ignore */}
+
+                    {/* Error Display for All Fields */}
+                    {allErrors.length > 0 && (
+                        <Alert color="red" className="mb-4">
+                            {allErrors.map((error, index) => error.message).join(', ')}
+                        </Alert>
+                    )}
+
+                    {/* Email Input */}
+                    <div>
                         <Input
                             label='Email'
                             name="username"
-                            size="lg"
+                            type="email"
+                            size="md"
                             placeholder="name@mail.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="flex flex-col gap-4"
+                            className="!text-lg !py-4 !h-14 !w-full border-gray-300 focus:border-indigo-600 focus:ring-indigo-600"
+                            labelProps={{
+                                className: 'text-base text-gray-700',
+                            }}
+                            //@ts-ignore 
+                            inputProps={{
+                                className: 'text-lg placeholder:text-gray-400',
+                                'aria-invalid': emailErrors.length > 0,
+                            }}
+                            required
+                            disabled
                         />
-                        {/* Display email errors using Alert */}
-                        {emailErrors.map((error, index) => (
-                            <Alert key={index} color="red" className="mt-1">
-                                {error.message}
-                            </Alert>
-                        ))}
                     </div>
 
-                    <div className="mb-1 flex flex-col gap-6">
-                        {/* @ts-ignore */}
+                    {/* Password Input with Icon */}
+                    <div className="relative">
                         <Input
                             label='Password'
                             name='password'
-                            type="password"
-                            size="lg"
+                            type={passwordVisible ? "text" : "password"} // Toggle password visibility
+                            size="md"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="flex flex-col gap-4"
+                            className="!text-lg !py-4 !h-14 !w-full border-gray-300 focus:border-indigo-600 focus:ring-indigo-600"
+                            labelProps={{
+                                className: 'text-base text-gray-700',
+                            }}
+                            //@ts-ignore 
+                            inputProps={{
+                                className: 'text-lg placeholder:text-gray-400',
+                                'aria-invalid': passwordErrors.length > 0,
+                            }}
+                            required
                         />
-                        {/* Display password errors using Alert */}
-                        {passwordErrors.map((error, index) => (
-                            <Alert key={index} color="red" className="mt-1">
-                                {error.message}
-                            </Alert>
-                        ))}
+                        <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 flex items-center pr-3"
+                            onClick={() => setPasswordVisible(!passwordVisible)}
+                        >
+                            {passwordVisible ? (
+                                <EyeSlashIcon className="h-5 w-5 text-gray-600" /> // Icon when password is hidden
+                            ) : (
+                                <EyeIcon className="h-5 w-5 text-gray-600" /> // Icon when password is visible
+                            )}
+                        </button>
                     </div>
-                    {/* @ts-ignore */}
-                    <Button type="submit" className="mt-6" fullWidth>
+
+                    <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-lg py-3">
                         Continue
                     </Button>
-                    {/* @ts-ignore */}
-                    <Typography color="gray" className="mt-4 text-center font-normal">
-                        Dont have an account?{" "}
-                        <a href={signupLink} className="font-medium text-gray-900">
+
+                    <Typography color="gray" className="mt-4 text-center text-xl">
+                        Don’t have an account?{" "}
+                        <a href={signupLink} className="ml-1 font-bold text-indigo-600 hover:text-indigo-700">
                             Signup
                         </a>
                     </Typography>
-                    {/* @ts-ignore */}
-                    <Typography color="gray" type='text' className="mt-4 text-center font-normal">
 
-                        <a href={forgotPasswordLink} className="font-medium text-gray-900">
-                            Forgot Password
+                    <Typography color="gray" className="mt-4 text-center font-normal">
+                        <a href={forgotPasswordLink} className="font-medium text-indigo-600 hover:text-indigo-700">
+                            Forgot Password?
                         </a>
                     </Typography>
                 </form>

@@ -13,62 +13,78 @@ export default function SignupId() {
     const { prompt, screen, state, getLink, getFieldErrors, client, tenant } = useContext(TransactionDataContext);
     const [email, setEmail] = useState('');
     const [loginLink, setLoginLink] = useState('');
-    const emailErrors = getFieldErrors('email');
+    const emailErrors = getFieldErrors('email') || [];
+
     useEffect(() => {
         console.log('Prompt:', prompt);
         console.log('Screen:', screen);
-        const link = getLink('login')
+        const link = getLink('login');
         setLoginLink(link);
     }, [prompt, screen, getLink]);
 
-    // const handleSubmit = (event: any) => {
-    //     event.preventDefault(); // Prevent page reload
-    //     console.log('Email:', email);
-    // };
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
+    // Combine all errors into one array
+    const allErrors = [...emailErrors];
 
-            {/* @ts-ignore */}
-            <Card color="transparent" shadow={true} className="p-6 w-full max-w-md">
-                {/* @ts-ignore */}
-                <Typography variant="h3" color="blue-gray" className="text-center mb-6">
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-400 to-purple-500">
+            <Card shadow={true} className="p-10 w-full max-w-2xl h-auto bg-white rounded-lg border border-gray-300">
+                
+                <Typography variant="h3" color="blue-gray" className="text-center mb-6 font-bold text-indigo-600 text-3xl">
                     Sign Up
                 </Typography>
-                {/* @ts-ignore */}
-                <Typography variant="paragraph" color="blue-gray" className="text-center mb-6 ">
+
+                <Typography variant="lead" color="blue-gray" className="text-center mb-6">
                     Sign Up to {tenant.friendly_name} to continue to {client.name}
                 </Typography>
+
                 <form method="POST" className="mt-4 mb-4">
                     <input type="hidden" name="state" value={state} />
+                    
+                    {/* Error Display */}
+                    {allErrors.length > 0 && (
+                        <Alert color="red" className="mb-4">
+                            {allErrors.map((error) => error.message).join(', ')}
+                        </Alert>
+                    )}
+
                     <div className="mb-1 flex flex-col gap-6">
-                        {/* @ts-ignore */}
                         <Input
                             label="Email"
                             name="email"
-                            size="lg"
+                            type="email"
+                            size="lg" // Ensures the input field matches the size used in SignUpPassword
                             placeholder="name@mail.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="flex flex-col gap-4"
+                            className="!text-lg !py-4 !h-14 !w-full border-gray-300 focus:border-indigo-600 focus:ring-indigo-600"
+                            labelProps={{
+                                className: 'text-base text-gray-700',
+                            }}
+                             //@ts-ignore 
+                            inputProps={{
+                                className: 'text-lg placeholder:text-gray-400',
+                                'aria-invalid': emailErrors.length > 0,
+                            }}
+                            required
                         />
-                        {/* Display email errors using Alert */}
-                        {emailErrors.map((error, index) => (
-                            <Alert key={index} color="red" className="mt-1">
-                                {error.message}
-                            </Alert>
-                        ))}
                     </div>
-                    {/* @ts-ignore */}
-                    <Button type="submit" name="action" value="default" className="mt-6" fullWidth>
+                    
+                    <Button size="lg" type="submit" name="action" value="default" className="mt-6 bg-indigo-600 hover:bg-indigo-700" fullWidth>
                         Continue
                     </Button>
-                    {/* @ts-ignore */}
-                    <Typography color="gray" className="mt-4 text-center font-normal">
+
+                    <Typography color="gray" className="mt-4 text-center text-xl">
                         Already have an account?{" "}
-                        <a href={loginLink} className="ml-1 font-bold">
+                        <a href={loginLink} className="ml-1 font-bold text-indigo-600 hover:text-indigo-700">
                             Login
                         </a>
                     </Typography>
+
+                    <br />
+                    <Button variant="outlined" size="lg" type="submit" name="connection" value="google-oauth2" className="flex h-12 border-blue-gray-200 items-center justify-center gap-2" fullWidth>
+                        <img src={`https://www.material-tailwind.com/logos/logo-google.png`} alt="google" className="h-6 w-6" />{" "}
+                        Sign in with Google
+                    </Button>
                 </form>
             </Card>
         </div>
