@@ -5,7 +5,7 @@ import { Card, Input, Button, Typography, Alert } from "@material-tailwind/react
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 const SignUpPassword = () => {
-    const { state, getSubmittedFormData, getFieldErrors, getLink } = useContext(TransactionDataContext);
+    const { state, getSubmittedFormData, getFieldErrors, getLink, client, tenant } = useContext(TransactionDataContext);
 
     const _email = getSubmittedFormData("email") || '';
     const [email, setEmail] = useState(_email);
@@ -35,13 +35,14 @@ const SignUpPassword = () => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-400 to-purple-500">
             <Card shadow={true} className="p-10 w-full max-w-2xl h-auto bg-white rounded-lg border border-gray-300">
-                <Typography
-                    variant="h3"
-                    color="blue-gray"
-                    className="text-center mb-6 font-bold text-indigo-600 text-3xl"
-                >
-                    Create Your Account
+                <Typography variant="h3" color="blue-gray" className="text-center mb-6 font-bold text-indigo-600 text-3xl">
+                    Sign Up
                 </Typography>
+
+                <Typography variant="lead" color="blue-gray" className="text-center mb-6">
+                    Sign Up to {tenant.friendly_name} to continue to {client.name}
+                </Typography>
+
 
                 <form method="POST" className="space-y-8">
                     <input type="hidden" name="state" value={state} />
