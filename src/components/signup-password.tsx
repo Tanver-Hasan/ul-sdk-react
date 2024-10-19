@@ -39,7 +39,7 @@ const SignUpPassword = () => {
                     Sign Up
                 </Typography>
 
-                <Typography variant="lead" color="blue-gray" className="text-center font-bold  mb-6">
+                <Typography variant="lead" color="blue-gray" className="text-center  mb-6">
                     Sign Up to {tenant.friendly_name} to continue to {client.name}
                 </Typography>
 
